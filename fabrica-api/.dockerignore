@@ -1,0 +1,10 @@
+.git
+.gitignore
+node_modules
+vendor
+storage
+bootstrap/cache
+.env
+check_admin_permissions.php
+check_admin_permissions_2.php
+docker-compose.yml

@@ -1,0 +1,64 @@
+@import './base.css';
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+}
+
+.bloco {
+  border: 1px solid #dbdada;
+  background-color: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+h1.lead.fs-4 {
+  position: relative;
+  display: inline-block;
+  color: #333;
+  font-family: 'Segoe UI', sans-serif;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+h1.lead.fs-4::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40%;
+  height: 2px;
+  background-color: #999;
+  border-radius: 2px;
+}
+
+
+h4.lead.fs-4::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40%;
+  height: 2px;
+  background-color: #999;
+  border-radius: 2px;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+    background-color: #f5f7fa;
+  }
+}
+
+
