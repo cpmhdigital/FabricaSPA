@@ -1,0 +1,68 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: fabrica_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: erp_fabrica_api
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: fabrica
+      MYSQL_PASSWORD: fabrica
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./fabrica-api
+      dockerfile: Dockerfile
+    container_name: fabrica_api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8000
+      APP_KEY: base64:3Q+PGq9YhW8ByKUtXnAr0Tav20nT6A4lqdYQ5ppDElQ=
+      FRONTEND_URL: http://localhost:8080
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: erp_fabrica_api
+      DB_USERNAME: fabrica
+      DB_PASSWORD: fabrica
+      SESSION_DRIVER: database
+      QUEUE_CONNECTION: database
+      CACHE_STORE: database
+      CORS_ALLOWED_ORIGINS: http://localhost:8080,http://127.0.0.1:8080
+      TEST_USERS_EMAIL_DOMAIN: fabrica.local
+      TEST_USERS_PASSWORD: password
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./fabrica-api/storage:/var/www/html/storage
+      - ./fabrica-api/bootstrap/cache:/var/www/html/bootstrap/cache
+
+  frontend:
+    build:
+      context: ./fabrica-web-app
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ""
+    container_name: fabrica_frontend
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+
+volumes:
+  db_data:
